@@ -10,10 +10,10 @@
 #define WIFI_PASSWORD ""
 
 // ===== MQTT =====
-const char* mqtt_server = "9867a0f8b99b43b293147b4f4cb0beba.s1.eu.hivemq.cloud";
+const char* mqtt_server = "***.s1.eu.hivemq.cloud";
 const int mqtt_port = 8883;
-const char* mqtt_username = "Hoakhanh";
-const char* mqtt_password = "Hk12345678";
+const char* mqtt_username = "***";
+const char* mqtt_password = "***";
 
 WiFiClientSecure espClient;
 PubSubClient client(espClient);
