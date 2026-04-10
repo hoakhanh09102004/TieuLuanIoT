@@ -453,7 +453,7 @@
         "id": "mqtt_broker",
         "type": "mqtt-broker",
         "name": "HiveMQ Cloud",
-        "broker": "9867a0f8b99b43b293147b4f4cb0beba.s1.eu.hivemq.cloud",
+        "broker": "***.s1.eu.hivemq.cloud",
         "port": "8883",
         "tls": "",
         "clientid": "",
