@@ -1,0 +1,540 @@
+[
+    {
+        "id": "c3dce4dab07d6fa6",
+        "type": "tab",
+        "label": "IoT Greenhouse"
+    },
+    {
+        "id": "c1154a21529bae23",
+        "type": "mqtt in",
+        "z": "c3dce4dab07d6fa6",
+        "name": "Nhận JSON từ DHT22",
+        "topic": "iot/dht",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "inputs": 0,
+        "x": 100,
+        "y": 280,
+        "wires": [
+            [
+                "c91eb62332133645"
+            ]
+        ]
+    },
+    {
+        "id": "c91eb62332133645",
+        "type": "function",
+        "z": "c3dce4dab07d6fa6",
+        "name": "Tách nhiệt độ & độ ẩm",
+        "func": "let data = msg.payload;\nif (typeof data === 'string') data = JSON.parse(data);\nreturn [\n    { payload: data.temp },\n    { payload: data.hum }\n];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 280,
+        "wires": [
+            [
+                "52ee0e0a7ba936c8",
+                "13d9e48f3be7ded2",
+                "b35e3fcc8244d1db"
+            ],
+            [
+                "be8e9c3a7b547ac7",
+                "53b3550e1824d41b",
+                "81fa78acb0bf6d92"
+            ]
+        ]
+    },
+    {
+        "id": "52ee0e0a7ba936c8",
+        "type": "ui_gauge",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_temp",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Nhiệt độ",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 50,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": 20,
+        "seg2": 35,
+        "diff": false,
+        "className": "",
+        "x": 600,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "13d9e48f3be7ded2",
+        "type": "ui_chart",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_temp",
+        "order": 2,
+        "width": 6,
+        "height": 4,
+        "label": "Biểu đồ nhiệt độ",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "50",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "outputs": 1,
+        "x": 620,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b35e3fcc8244d1db",
+        "type": "function",
+        "z": "c3dce4dab07d6fa6",
+        "name": "Thông báo nhiệt độ",
+        "func": "let t = msg.payload;\nif (t < 20) msg.payload = \"❄️ NHIỆT ĐỘ THẤP\";\nelse if (t > 35) msg.payload = \"🔥 NHIỆT ĐỘ CAO\";\nelse msg.payload = \"✅ NHIỆT ĐỘ BÌNH THƯỜNG\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 180,
+        "wires": [
+            [
+                "c85e9184432e8a93"
+            ]
+        ]
+    },
+    {
+        "id": "c85e9184432e8a93",
+        "type": "ui_text",
+        "z": "c3dce4dab07d6fa6",
+        "group": "group_temp",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "Trạng thái",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 840,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "be8e9c3a7b547ac7",
+        "type": "ui_gauge",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_hum",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Độ ẩm",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 100,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": 50,
+        "seg2": 80,
+        "diff": false,
+        "className": "",
+        "x": 590,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "53b3550e1824d41b",
+        "type": "ui_chart",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_hum",
+        "order": 2,
+        "width": 6,
+        "height": 4,
+        "label": "Biểu đồ độ ẩm",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "outputs": 1,
+        "x": 620,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "81fa78acb0bf6d92",
+        "type": "function",
+        "z": "c3dce4dab07d6fa6",
+        "name": "Thông báo độ ẩm",
+        "func": "let h = msg.payload;\nif (h < 50) msg.payload = \"⚠️ ĐỘ ẨM THẤP\";\nelse if (h > 80) msg.payload = \"💧 ĐỘ ẨM CAO\";\nelse msg.payload = \"✅ ĐỘ ẨM BÌNH THƯỜNG\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 400,
+        "wires": [
+            [
+                "d36260b533b8abd2"
+            ]
+        ]
+    },
+    {
+        "id": "d36260b533b8abd2",
+        "type": "ui_text",
+        "z": "c3dce4dab07d6fa6",
+        "group": "group_hum",
+        "order": 3,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "Trạng thái",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 840,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "bc187fbb84d7d145",
+        "type": "ui_button",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_pump",
+        "order": 1,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "BẬT Bơm",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "ON",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "f6cceb9542b514a9"
+            ]
+        ]
+    },
+    {
+        "id": "e93804b8108ad292",
+        "type": "ui_button",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_pump",
+        "order": 2,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "TẮT Bơm",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "OFF",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "f6cceb9542b514a9"
+            ]
+        ]
+    },
+    {
+        "id": "2684f48e509f9314",
+        "type": "ui_button",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_pump",
+        "order": 3,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "AUTO Bơm",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "AUTO",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "f6cceb9542b514a9"
+            ]
+        ]
+    },
+    {
+        "id": "f6cceb9542b514a9",
+        "type": "mqtt out",
+        "z": "c3dce4dab07d6fa6",
+        "name": "Điều khiển bơm",
+        "topic": "iot/control/pump",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt_broker",
+        "x": 320,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "523486f02f2e70d2",
+        "type": "ui_button",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_fan",
+        "order": 1,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "BẬT Quạt",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "ON",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 280,
+        "y": 420,
+        "wires": [
+            [
+                "1739fe9e261b9d32"
+            ]
+        ]
+    },
+    {
+        "id": "6bb6bb4cdb7d9778",
+        "type": "ui_button",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_fan",
+        "order": 2,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "TẮT Quạt",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "OFF",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 280,
+        "y": 480,
+        "wires": [
+            [
+                "1739fe9e261b9d32"
+            ]
+        ]
+    },
+    {
+        "id": "2d8d23f5dd36c0a4",
+        "type": "ui_button",
+        "z": "c3dce4dab07d6fa6",
+        "name": "",
+        "group": "group_fan",
+        "order": 3,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "AUTO Quạt",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "AUTO",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 290,
+        "y": 540,
+        "wires": [
+            [
+                "1739fe9e261b9d32"
+            ]
+        ]
+    },
+    {
+        "id": "1739fe9e261b9d32",
+        "type": "mqtt out",
+        "z": "c3dce4dab07d6fa6",
+        "name": "Điều khiển quạt",
+        "topic": "iot/control/fan",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt_broker",
+        "x": 520,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "HiveMQ Cloud",
+        "broker": "9867a0f8b99b43b293147b4f4cb0beba.s1.eu.hivemq.cloud",
+        "port": "8883",
+        "tls": "",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "group_temp",
+        "type": "ui_group",
+        "name": "Nhiệt độ",
+        "tab": "tab_dashboard",
+        "order": 1,
+        "disp": false,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "group_hum",
+        "type": "ui_group",
+        "name": "Độ ẩm",
+        "tab": "tab_dashboard",
+        "order": 2,
+        "disp": false,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "group_pump",
+        "type": "ui_group",
+        "name": "Máy bơm",
+        "tab": "tab_dashboard",
+        "order": 3,
+        "disp": false,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "group_fan",
+        "type": "ui_group",
+        "name": "Quạt",
+        "tab": "tab_dashboard",
+        "order": 4,
+        "disp": false,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "tab_dashboard",
+        "type": "ui_tab",
+        "name": "Dashboard",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "d1c7ec66b2cb32fd",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
